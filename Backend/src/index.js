@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import { connectDB } from './Config/dbConfig.js';
 import { PORT } from './Config/serverConfig.js';
+import apiRouter from './Routers/apiRouter.js';
 
 
 
@@ -16,6 +17,8 @@ app.use(express.raw());
 app.get('/ping', (req, res) => {
   return res.status(StatusCodes.OK).json({ message: 'pong' });
 });
+
+app.use('/api', apiRouter)
 
 app.listen(PORT, () => {
   console.log('server is running on port', PORT);
