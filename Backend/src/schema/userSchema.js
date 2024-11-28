@@ -10,29 +10,32 @@ const userSchema = new mongoose.Schema({
     },
     email:{
         type: String,
-        required: true,
+        required: [true, 'Email is required'],
         unique: true,
         minLength: 5,
-        validate: { // this property is use for to write custom validation
-             validator: function(email_Value){
-                return   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email_Value) // it will take (email_value) and test on the regex experssion.
-             },
-             message: "Invalid email format" // if anything goes wrong the we print this message
-        }
+        match: [ 
+             /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+             "please fill valid email address" 
+            ]
     },
     password: {
         type: String,
         required: true,
         minLength: 5,
     },
+    avatar: {
+        type: String,
+    }
   }, 
-{timestamps:true}
 
+{timestamps:true}
 );
 
-userSchema.pre('save', function modifyPassword(next){
+userSchema.pre('save', function modifyAvatarandPassword(next){
     // incoming user object
     const user = this; // object with plain password
+
+    user.avatar = `https://robohash.org/${user.username}`; // it creates avatar or DP for a new user
 
     const SALT = bcrypt.genSaltSync(10);
 

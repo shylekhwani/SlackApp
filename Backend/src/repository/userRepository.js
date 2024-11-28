@@ -9,8 +9,8 @@ export const findUserEmail = async function (email) {
         // Returning the user found, if any
         return user;
     } catch (error) {
-       
         console.log(error);
+        throw error;
     }
 };
 
@@ -23,8 +23,8 @@ export const findAllUser = async function () {
         // Returning the list of users found
         return users;
     } catch (error) {
-        
         console.log(error);
+        throw error;    
     }
 };
 
@@ -35,5 +35,45 @@ export const createUser = async function (user) {
     } catch (error) {
         console.log(error)
         throw error
+    }
+};
+
+export const getUserByName = async function (username) {
+    try {
+        const user = await User.findOne({ username }); // Query by username field
+        return user;
+      } catch (error) {
+        console.error('Error fetching user by username:', error);
+        throw error;
+      }
+};
+
+export const getUserById = async function (id) {
+    try {
+        const user = await User.findById(id)
+        return user
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const deleteUserById = async function (id) {
+    try {
+        const user = await User.findByIdAndDelete(id);
+        return user;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+export const updateUser = async function (id, userToUpdate) {
+    try {
+        const user = await User.findByIdAndUpdate(id, userToUpdate, { new: true });
+        return user;
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 };

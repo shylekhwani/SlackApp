@@ -1,10 +1,22 @@
-import { createUserService, signinUserService } from "../service/userService.js";
+import { createUserService, getAllUserService, signinUserService } from "../service/userService.js";
 
-export async function getProfile(req,res){
-    return res.json({
-        success: true,
-        message:'Profile Fetched successfully',
-    })
+export async function getAllProfile(req,res){
+    try {
+        const users = await getAllUserService();
+
+        return res.status(200).json({
+            success: true,
+            message: 'Users fetched successfully',
+            data: users,
+        });
+    } catch (error) {
+        console.error('Error in getAllProfile:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to fetch users',
+        });
+    }
 };
 
 export async function signup(req,res) {
