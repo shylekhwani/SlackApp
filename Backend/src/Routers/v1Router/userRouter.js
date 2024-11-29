@@ -1,14 +1,19 @@
 import express from 'express'
 
-import { getAllProfile, signin, signup } from '../../controller/userController.js';
+import { deleteUser, getAllProfile, signin, signup } from '../../controller/userController.js';
+import { zodSigninSchema } from '../../Validators/zodSigninSchema.js';
+import { zodSignupSchema } from '../../Validators/zodSignupSchema.js';
+import { validate } from '../../Validators/zodValidator.js';
 
 
 const userRouter = express.Router();
 
 userRouter.get('/profile', getAllProfile);
 
-userRouter.post('/signup', signup);
+userRouter.post('/signup', validate(zodSignupSchema), signup);
 
-userRouter.post('/signin', signin)
+userRouter.post('/signin', validate(zodSigninSchema), signin)
+
+userRouter.delete('/:id', deleteUser)
 
 export default userRouter;

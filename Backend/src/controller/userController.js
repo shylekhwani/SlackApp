@@ -1,4 +1,4 @@
-import { createUserService, getAllUserService, signinUserService } from "../service/userService.js";
+import { createUserService, deleteUserByIdService, getAllUserService, signinUserService } from "../service/userService.js";
 
 export async function getAllProfile(req,res){
     try {
@@ -68,6 +68,33 @@ export async function signin(req,res) {
         return res.status(500).json({
             success: false,
             message: 'Internal server error',
+        });
+    }
+};
+
+export const deleteUser = async function (req, res) {
+    try {
+        // Extract the ID from URL parameters
+        const user = await deleteUserByIdService(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false, 
+                message: "User not found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "User deleted successfully",
+            data: user, 
+        });
+    } catch (error) {
+        console.error('Error in deleteUser:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to delete user",
         });
     }
 };

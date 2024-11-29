@@ -40,7 +40,7 @@ export const createUser = async function (user) {
 
 export const getUserByName = async function (username) {
     try {
-        const user = await User.findOne({ username }); // Query by username field
+        const user = await User.findOne({ username }).select('-password'); // exclude password 
         return user;
       } catch (error) {
         console.error('Error fetching user by username:', error);
