@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import { createUser, deleteUserById, findAllUser, findUserEmail, getUserById, updateUser } from "../repository/userRepository.js";
+import { createJWT } from '../utils/authUtils.js';
 
 export const createUserService = async function (user) {
     try {
@@ -24,26 +25,41 @@ export const createUserService = async function (user) {
 };
 
 export const signinUserService = async function (userDetails) {
-    
-        // check if there is valid registred user with the email
-        const user = await findUserEmail(userDetails.email);
+    try {
+         // check if there is valid registred user with the email
+         const user = await findUserEmail(userDetails.email);
 
-        if(!user) {
-            throw {
-                status: 404,
-                message: 'User not found'
-            }
-        }
-        // comapre the password
-        const isPasswordValid = bcrypt.compareSync(userDetails.password, user.password);
+         if(!user) {
+             throw {
+                 status: 404,
+                 message: 'User not found'
+             }
+         }
+         // comapre the password
+         const isPasswordValid = bcrypt.compareSync(userDetails.password, user.password);
+ 
+         if(!isPasswordValid) {
+             throw {
+                 status: 401,
+                 message: "Invalid Password"
+             }
+         } 
 
-        if(!isPasswordValid) {
-            throw {
-                status: 401,
-                message: "Invalid Password"
-            }
-        } 
-    return user;
+        //  console.log("Payload for JWT:", { id: user.id, email: user.email, username: user.username });
+
+     return {
+         username: user.username,
+         avatar: user.avatar,
+         email: user.email,
+         id: user.id,
+         token: createJWT({id: user.id, username: user.username, email: user.email,})
+     }
+
+    } catch (error) {
+        console.log("SignIn service error",error);
+        throw error;
+    }
+       
 };
 
 export const checkIfUserExist = async function (email) {

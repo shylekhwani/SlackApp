@@ -1,5 +1,5 @@
-import { checkIfUserExist } from "../services/userService.js";
-import { verifyJwt } from "../utils/jwt.js";
+import { getUserById } from "../repository/userRepository.js";
+import { verifyJwt } from "../utils/authUtils.js";
 
 export const isAuthenticated = async function (req, res, next) {
     // Check if JWT is passed in the header
@@ -16,27 +16,26 @@ export const isAuthenticated = async function (req, res, next) {
     try {
         const response = await verifyJwt(token);
 
-        // console.log("Decoded JWT response:", response);
+        console.log("Decoded JWT response:", response);
 
-        if (!response.email) {
+        if (!response) {
             return res.status(400).json({
                 success: false,
-                message: 'Email is missing in token'
+                message: 'invalid auth token'
             });
         }
 
-        // console.log("Email passed to checkIfUserExist:", response.email);
-        const doesUserExist = await checkIfUserExist(response.email);
+        const user = await getUserById(response.id);
+        // console.log("Decoded response.id:", response.id);
 
-        if (!doesUserExist) {
+        if (!user) {
             return res.status(404).json({
                 success: false,
                 message: 'User not found'
             });
         }
-       
-        // console.log("Decoded token response:", response);
-        req.user = response;
+        
+        req.user = user.id; // user and response ID are same eg: "67499aa448b9f40d1bed1c84"
         
         next();
     } catch (error) {
