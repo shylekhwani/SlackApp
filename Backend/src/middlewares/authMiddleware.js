@@ -34,9 +34,13 @@ export const isAuthenticated = async function (req, res, next) {
                 message: 'User not found'
             });
         }
+
+        // console.log('auth Middleware', user);
+        // console.log('auth Middleware before', req);
         
         req.user = user.id; // user and response ID are same eg: "67499aa448b9f40d1bed1c84"
-        
+
+        // console.log('auth Middleware after', req);
         next();
     } catch (error) {
         console.log(error)

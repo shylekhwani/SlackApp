@@ -1,6 +1,6 @@
-import Workspace from "../schema/workSpaceSchema.js";
 import crudRepository from '../repository/crudRepository.js';
 import User from "../schema/userSchema.js";
+import Workspace from "../schema/workSpaceSchema.js";
 import channelRepository from "./channelRepository.js";
 
 const workspaceRepository = {
@@ -86,8 +86,11 @@ const workspaceRepository = {
 
     fetchAllWorkspaceByMemberId: async function (memberId) {
 
-        const workspace = await Workspace.find({
-            'members.memberId': memberId
+     /* The query { 'members.memberId': memberId } searches for workspaces
+     where the "members" array contains an object whose 'memberId' field matches the provided "memberId".*/
+     
+        const workspace = await Workspace.find({                
+         'members.memberId': memberId                                    
         }).populate('members.memberId', 'username email avatar');
 
         return workspace;
