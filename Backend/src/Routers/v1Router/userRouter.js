@@ -11,9 +11,9 @@ const userRouter = express.Router();
 
 userRouter.get('/profile', getAllProfile);
 
-userRouter.post('/signup', validate(zodSignupSchema), signup);
+userRouter.post('/signup',  validate(zodSignupSchema), signup);
 
-userRouter.post('/signin', isAuthenticated, validate(zodSigninSchema), signin);
+userRouter.post('/signin',  validate(zodSigninSchema), signin);
 
 userRouter.delete('/:id', isAuthenticated, deleteUser);
 

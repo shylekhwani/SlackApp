@@ -1,4 +1,4 @@
-import { createWorkspaceService, deleteWorkspaceService, getWorkspaceUserIsPartOfService } from "../service/workspaceService.js";
+import { addChannelToWorkspaceService, addMemberToWorkspaceService, createWorkspaceService, deleteWorkspaceService, getWorkspaceByJoinCodeService, getWorkspaceService, getWorkspaceUserIsPartOfService, updateWorkspaceService } from "../service/workspaceService.js";
 
 export const createWorkspaceController = async function (req,res) {
   try {
@@ -68,5 +68,123 @@ export const deleteWorkspaceController = async function (req , res) {
         message: 'Failed to delete Workspace',
     });
 
+  }
+};
+
+export const getWorkspaceController = async function (req, res) {
+  try {
+    const workspaceId = req.params.workspaceId;
+    const userId = req.user;
+
+    const response = await getWorkspaceService(workspaceId, userId);
+
+    return res.status(201).json({
+      success: true,
+      message:'Workspace Fetched successfully',
+      data: response
+   });
+  } catch (error) {
+    console.log("Get Workspace Controller Error", error); // Debug log
+
+    return res.status(500).json({
+        success: false,
+        message: 'Failed to get Workspace',
+    });
+
+  }
+};
+
+export const getWorkspaceByJoinCodeController = async function (req, res) {
+  try {
+        const joinCode = req.params.joincode;
+        const userId = req.user;
+
+        const response = await getWorkspaceByJoinCodeService(joinCode, userId);
+
+        return res.status(201).json({
+          success: true,
+          message:'Workspace Fetched successfully',
+          data: response
+      });
+  } catch (error) {
+    console.log("Get Workspace by joinCode Controller Error", error); // Debug log
+
+    return res.status(500).json({
+        success: false,
+        message: 'Failed to get Workspace by joinCode',
+    });
+  }
+};
+
+export const updateWorkspaceController = async function (req,res) {
+  try {
+      const workspaceId = req.params.workspaceId;
+      const workspaceData = req.body;
+      const userId = req.user;
+
+     const response = await updateWorkspaceService(workspaceId, workspaceData, userId);
+
+     return res.status(201).json({
+      success: true,
+      message:'Workspace Updated successfully',
+      data: response
+     });
+  
+  } catch (error) {
+    console.log("Error in update workspace controller", error); // Debug log
+
+    return res.status(500).json({
+        success: false,
+        message: 'Error in updating workspace',
+    });
+  }
+};
+
+export const addMemberToWorkspaceController = async function (req, res) {
+  try {
+    const workspaceId = req.params.workspaceId;
+    const memberId = req.body.memberId;
+    const role = req.body.role || 'member';
+    const userId = req.user;
+    
+    const response = await addMemberToWorkspaceService(workspaceId, memberId, role, userId);
+
+    return res.status(201).json({
+      success: true,
+      message:'Member added successfully into workspace',
+      data: response
+     });
+
+  } catch (error) {
+    console.log("Error in add member to workspace controller", error); // Debug log
+
+    return res.status(500).json({
+        success: false,
+        message: 'Error in adding member to workspace',
+    });
+  }
+};
+
+export const addChannelToWorkspaceController = async function (req, res) {
+  try {
+    const workspaceId = req.params.workspaceId;
+    const channelName = req.body.channelname;
+    const userId = req.user;
+
+    const response = await addChannelToWorkspaceService(workspaceId, channelName, userId);
+
+    return res.status(201).json({
+      success: true,
+      message:'Channel added successfully into workspace',
+      data: response
+     });
+
+  } catch (error) {
+    console.log("Error in add channel to workspace controller", error); // Debug log
+
+    return res.status(500).json({
+        success: false,
+        message: 'Error in adding channel to workspace',
+    });
   }
 };
