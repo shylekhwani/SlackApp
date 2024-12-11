@@ -3,7 +3,7 @@ import express from 'express'
 import { addChannelToWorkspaceController, addMemberToWorkspaceController, createWorkspaceController, deleteWorkspaceController, getWorkspaceByJoinCodeController, getWorkspaceController, getWorkspaceUserIsPartOfController, updateWorkspaceController } from '../../controller/workspaceController.js';
 import { isAuthenticated } from '../../middlewares/authMiddleware.js';
 import { validate } from '../../Validators/zodValidator.js';
-import { zodworkspaceSchema } from '../../Validators/zodWorkspaceSchema.js';
+import { addChannelToWorkspaceSchema, addMemberToWorkspaceSchema, zodworkspaceSchema } from '../../Validators/zodWorkspaceSchema.js';
 
 const workspaceRouter = express.Router();
 
@@ -19,8 +19,8 @@ workspaceRouter.get('/join/:joincode', isAuthenticated, getWorkspaceByJoinCodeCo
 
 workspaceRouter.put('/:workspaceId', isAuthenticated, updateWorkspaceController);
 
-workspaceRouter.put('/:workspaceId/members', isAuthenticated, addMemberToWorkspaceController);
+workspaceRouter.put('/:workspaceId/members', isAuthenticated, validate(addMemberToWorkspaceSchema), addMemberToWorkspaceController);
 
-workspaceRouter.put('/:workspaceId/channels', isAuthenticated, addChannelToWorkspaceController);
+workspaceRouter.put('/:workspaceId/channels', isAuthenticated, validate(addChannelToWorkspaceSchema), addChannelToWorkspaceController);
 
 export default workspaceRouter;
