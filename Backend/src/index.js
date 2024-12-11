@@ -20,7 +20,7 @@ app.get('/ping', (req, res) => {
 
 app.use('/api', apiRouter)
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log('server is running on port', PORT);
   connectDB();
 });
