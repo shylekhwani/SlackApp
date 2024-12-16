@@ -1,13 +1,18 @@
 import express from 'express';
+import { createServer } from 'http';
 import { StatusCodes } from 'http-status-codes';
+import { Server } from 'socket.io';
 
 import { connectDB } from './Config/dbConfig.js';
 import { PORT } from './Config/serverConfig.js';
+import { socketHandller } from './controller/socketController.js';
 import apiRouter from './Routers/apiRouter.js';
 
 
-
 const app = express();
+const server = createServer(app);
+const io = new Server(server);
+
 
 app.use(express.json());
 app.use(express.text());
@@ -18,10 +23,16 @@ app.get('/ping', (req, res) => {
   return res.status(StatusCodes.OK).json({ message: 'pong' });
 });
 
-app.use('/api', apiRouter)
+app.use('/api', apiRouter);
 
-app.listen(PORT, async () => {
+
+io.on('connection', (socket) => { 
+  // This callback is executed whenever a new client connects to the server
+  console.log('A user connected', socket.id);
+  socketHandller(io, socket);
+});
+
+server.listen(PORT, async () => {
   console.log('server is running on port', PORT);
   connectDB();
 });
-
