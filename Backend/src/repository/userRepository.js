@@ -1,7 +1,7 @@
 import User from '../schema/userSchema.js'
 
 // Function to find a user by their email address
-export const findUserEmail = async function (email) {
+export const findUserByEmail = async function (email) {
     try {
         // Searching for a user in the database with the specified email
         const user = await User.findOne({ email });

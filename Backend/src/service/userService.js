@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import { createUser, deleteUserById, findAllUser, findUserEmail, getUserById, updateUser } from "../repository/userRepository.js";
+import { createUser, deleteUserById, findAllUser, findUserByEmail, getUserById, updateUser } from "../repository/userRepository.js";
 import { createJWT } from '../utils/authUtils.js';
 
 export const createUserService = async function (user) {
@@ -27,7 +27,7 @@ export const createUserService = async function (user) {
 export const signinUserService = async function (userDetails) {
     try {
          // check if there is valid registred user with the email
-         const user = await findUserEmail(userDetails.email);
+         const user = await findUserByEmail(userDetails.email);
 
          if(!user) {
              throw {
@@ -63,7 +63,7 @@ export const signinUserService = async function (userDetails) {
 };
 
 export const checkIfUserExist = async function (email) {
-        const user = await findUserEmail(email);
+        const user = await findUserByEmail(email);
         return user;
 };
 
