@@ -1,24 +1,28 @@
-import { createMessageService } from "../service/messageService.js";
-import { NEW_MESSAGE_EVENT } from "../utils/eventConstants.js";
+import { createMessageService } from "../../service/messageService.js";
+import { NEW_MESSAGE_EVENT, NEW_MESSAGE_RECEIVED_EVENT } from "../../utils/eventConstants.js"
 
-export const socketHandller = function(io, socket){
-    
+export const messageSocketController= function(io, socket) {
+  
   /*------------------ Receiving Messages from Client ------------------------*/
-  socket.on(NEW_MESSAGE_EVENT, createMessageHandler);
+  socket.on(NEW_MESSAGE_EVENT, async function createMessageHandler (data, CB) {
+    
+    const channelId = data.channelId;
 
-  /*------------------ Sending a Message from Server to Client ------------------------*/
-  // Emit an initial message to the connected client from the server
-  socket.emit('hello', 'Message is coming from server side');
-}; 
-
-const createMessageHandler = async function (data, CB) {
     const messageResponse = await createMessageService(data);
+      
+    // socket.broadcast.emit(NEW_MESSAGE_RECEIVED_EVENT, messageResponse);
+    io.to(channelId).emit(NEW_MESSAGE_RECEIVED_EVENT, messageResponse); // everybody in room will receive message
+
     CB({
         success: true,
         message: "Successfully created message",
         data: messageResponse
     });
-};
+
+  }); 
+
+}; 
+
 
 /* 
 
