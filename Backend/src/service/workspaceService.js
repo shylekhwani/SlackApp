@@ -76,16 +76,18 @@ export const deleteWorkspaceService = async function (workspaceId, userId) { // 
 
 export const getWorkspaceService = async function (workspaceId, userId) {
     try {
-        const workspace = await workspaceRepository.getById(workspaceId);
+        const workspace = await workspaceRepository.getWorkspaceDetailsById(workspaceId);
 
         if (!workspace) {
             throw new Error('Workspace not found');
         };
 
         const isMemberPartOfWorkspace = workspace.members.find(
-            (member) => member.memberId.toString() === userId 
+            (member) => {
+                return member.memberId._id.toString() === userId 
+            }
         );
-        
+
         if (!isMemberPartOfWorkspace) {
             throw new Error('User is not the member of Workspace');
         };
