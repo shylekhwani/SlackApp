@@ -168,7 +168,7 @@ export const addMemberToWorkspaceController = async function (req, res) {
 export const addChannelToWorkspaceController = async function (req, res) {
   try {
     const workspaceId = req.params.workspaceId;
-    const channelName = req.body.channelname;
+    const channelName = req.body.channelName;
     const userId = req.user;
 
     const response = await addChannelToWorkspaceService(workspaceId, channelName, userId);

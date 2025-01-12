@@ -209,7 +209,7 @@ export const addChannelToWorkspaceService = async function (workspaceId, channel
         const isChannelAlreadyPartOfWorkspace = workspace.channels.find(
             (channel) => channel?.name?.toLowerCase() === channelName.toLowerCase()
         );
-        
+       
         if (isChannelAlreadyPartOfWorkspace) {
             throw new Error('Channel Already part of Workspace');
         };
