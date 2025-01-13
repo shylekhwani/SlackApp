@@ -1,4 +1,4 @@
-import { addChannelToWorkspaceService, addMemberToWorkspaceService, createWorkspaceService, deleteWorkspaceService, getWorkspaceByJoinCodeService, getWorkspaceService, getWorkspaceUserIsPartOfService, updateWorkspaceService } from "../service/workspaceService.js";
+import { addChannelToWorkspaceService, addMemberToWorkspaceService, createWorkspaceService, deleteWorkspaceService, getWorkspaceByJoinCodeService, getWorkspaceService, getWorkspaceUserIsPartOfService, resetWorkspaceJoinCodeService, updateWorkspaceService } from "../service/workspaceService.js";
 
 export const createWorkspaceController = async function (req,res) {
   try {
@@ -187,4 +187,26 @@ export const addChannelToWorkspaceController = async function (req, res) {
         message: 'Error in adding channel to workspace',
     });
   }
+};
+
+export const resetWorkspaceJoinCodeController = async function (req, res) {
+   try {
+        const workspaceId = req.params.workspaceId;
+        const userId = req.user;
+
+        const response = await resetWorkspaceJoinCodeService(workspaceId, userId);
+        return res.status(201).json({
+          success: true,
+          message:'Join code Reset Successfully',
+          data: response
+         });
+         
+   } catch (error) {
+      console.log("Error in reset workspace joinCode controller", error); // Debug log
+
+      return res.status(500).json({
+          success: false,
+          message: 'Error in reseting joinCode controller',
+      });
+   }
 };

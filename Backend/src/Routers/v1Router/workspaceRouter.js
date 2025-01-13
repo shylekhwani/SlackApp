@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { addChannelToWorkspaceController, addMemberToWorkspaceController, createWorkspaceController, deleteWorkspaceController, getWorkspaceByJoinCodeController, getWorkspaceController, getWorkspaceUserIsPartOfController, updateWorkspaceController } from '../../controller/workspaceController.js';
+import { addChannelToWorkspaceController, addMemberToWorkspaceController, createWorkspaceController, deleteWorkspaceController, getWorkspaceByJoinCodeController, getWorkspaceController, getWorkspaceUserIsPartOfController, resetWorkspaceJoinCodeController, updateWorkspaceController } from '../../controller/workspaceController.js';
 import { isAuthenticated } from '../../middlewares/authMiddleware.js';
 import { validate } from '../../Validators/zodValidator.js';
 import { addChannelToWorkspaceSchema, addMemberToWorkspaceSchema, zodworkspaceSchema } from '../../Validators/zodWorkspaceSchema.js';
@@ -22,5 +22,7 @@ workspaceRouter.put('/:workspaceId', isAuthenticated, updateWorkspaceController)
 workspaceRouter.put('/:workspaceId/members', isAuthenticated, validate(addMemberToWorkspaceSchema), addMemberToWorkspaceController);
 
 workspaceRouter.put('/:workspaceId/channels', isAuthenticated, validate(addChannelToWorkspaceSchema), addChannelToWorkspaceController);
+
+workspaceRouter.put('/:workspaceId/joinCode/reset', isAuthenticated, resetWorkspaceJoinCodeController);
 
 export default workspaceRouter;
