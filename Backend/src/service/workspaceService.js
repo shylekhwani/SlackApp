@@ -236,3 +236,29 @@ export const addChannelToWorkspaceService = async function (workspaceId, channel
         throw error; 
     }
 };
+
+export const joinWorkspaceService = async function (workspaceId, joinCode, userId) {
+    try {
+        const workspace = await workspaceRepository.getWorkspaceDetailsById(workspaceId);
+
+        if (!workspace) {
+            throw new Error('Workspace not found');
+        };
+
+        if(workspace.joinCode !== joinCode) {
+            throw new Error ('Invalid JoinCode')
+        };
+
+        const response = await workspaceRepository.addMemberToWorkspace(
+             workspaceId, 
+             userId, // MemberId
+             'member'
+        );
+
+        return response;
+
+    } catch (error) {
+        console.error("Join workspace service error:", error);
+        throw error; 
+    }
+};
