@@ -13,7 +13,7 @@ export const messageSocketController= function(io, socket) {
     // socket.broadcast.emit(NEW_MESSAGE_RECEIVED_EVENT, messageResponse);
     io.to(channelId).emit(NEW_MESSAGE_RECEIVED_EVENT, messageResponse); // everybody in room will receive message
 
-    CB({
+    CB?.({
         success: true,
         message: "Successfully created message",
         data: messageResponse

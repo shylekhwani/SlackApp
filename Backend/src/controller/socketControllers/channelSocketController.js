@@ -7,7 +7,7 @@ export const channelSocketController = function(io, socket) {
     const roomId = data.channelId;
     socket.join(roomId);
 
-    CB({
+    CB?.({
         success: true,
         message: "Successfully Joined The Channel",
         data: roomId
